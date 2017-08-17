@@ -38,7 +38,7 @@ this.get('scheduler').schedule(() => {
 
 To setup, you can set the following variables on `config/environment` file:
 
-```
+```json
 {
 taskScheduler: {
     FPS: 60
