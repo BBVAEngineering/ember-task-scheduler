@@ -1,6 +1,6 @@
 # ember-task-scheduler [![Build Status](https://travis-ci.org/BBVAEngineering/ember-task-scheduler.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-task-scheduler) [![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-task-scheduler.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-task-scheduler) [![Dependency Status](https://david-dm.org/BBVAEngineering/ember-task-scheduler.svg)](https://david-dm.org/BBVAEngineering/ember-task-scheduler)
 
-An [ember-cli addon](http://www.ember-cli.com/) to manage modals as promises.
+An [ember-cli addon](http://www.ember-cli.com/) to schedule tasks to try to preserve 60 FPS rate on browsers.
 
 ## Information
 
