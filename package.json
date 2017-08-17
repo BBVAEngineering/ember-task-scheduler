@@ -28,7 +28,10 @@
       "url": "https://github.com/josex2r/"
     }
   ],
-  "repository": "https://github.com/BBVAEngineering/ember-task-scheduler",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BBVAEngineering/ember-task-scheduler.git"
+  },
   "scripts": {
     "build": "ember build",
     "start": "ember server",
