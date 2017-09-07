@@ -12,7 +12,7 @@ module.exports = {
 		} else if (app.import) { // support ember-cli < 2.7
 			app.import(polyfill, { prepend: true });
 		} else {
-			console.warn('Please run: ember install ember-cli-import-polyfill')
+			console.warn('Please run: ember install ember-cli-import-polyfill');
 		}
 	},
 
