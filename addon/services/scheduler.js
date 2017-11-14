@@ -256,8 +256,8 @@ export default Service.extend({
 			const [currentTarget, currentMethod] = tasks[i];
 
 			if (currentTarget === target && currentMethod === method) {
-				tasks[i][2] = args;   // replace args
-				tasks[i][3] = stack;  // eslint-disable-line no-magic-numbers
+				tasks[i][2] = args; // replace args
+				tasks[i][3] = stack; // eslint-disable-line no-magic-numbers
 				return;
 			}
 		}
@@ -330,7 +330,12 @@ export default Service.extend({
 			[target, method, args, stack] = tasks.shift();
 
 			this._exec(target, method, args, stack);
-		} while (tasks.length > 0 && performance.now() - startTime < millisecondsPerFrame);
+		} while (!this.isDestroyed && tasks.length > 0 && performance.now() - startTime < millisecondsPerFrame);
+
+		// After exec, service could be destroyed. Recheck.
+		if (this.isDestroyed) {
+			return;
+		}
 
 		if (tasks.length > 0) {
 			this._next();
