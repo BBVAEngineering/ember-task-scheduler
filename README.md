@@ -1,4 +1,9 @@
-# ember-task-scheduler [![Build Status](https://travis-ci.org/BBVAEngineering/ember-task-scheduler.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-task-scheduler) [![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-task-scheduler.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-task-scheduler) [![Dependency Status](https://david-dm.org/BBVAEngineering/ember-task-scheduler.svg)](https://david-dm.org/BBVAEngineering/ember-task-scheduler)
+# ember-task-scheduler
+
+[![Build Status](https://travis-ci.org/BBVAEngineering/ember-task-scheduler.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-task-scheduler)
+[![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-task-scheduler.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-task-scheduler)
+[![npm version](https://badge.fury.io/js/ember-storages.svg)](https://badge.fury.io/js/ember-task-scheduler)
+[![Dependency Status](https://david-dm.org/BBVAEngineering/ember-task-scheduler.svg)](https://david-dm.org/BBVAEngineering/ember-task-scheduler)
 
 An [ember-cli addon](http://www.ember-cli.com/) to schedule tasks to try to preserve 60 FPS rate on browsers.
 
@@ -60,3 +65,16 @@ This addon will handle this type of scheduling by running a FIFO queue with call
 ## Contribute
 
 If you want to contribute to this addon, please read the [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/BBVAEngineering/ember-task-scheduler/tags).
+
+
+## Authors
+
+See the list of [contributors](https://github.com/BBVAEngineering/ember-task-scheduler/graphs/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
