@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 // link: https://gist.github.com/paulirish/5438650
 (function() {
 	if ('performance' in window === false) {
