@@ -1,8 +1,7 @@
-/* eslint-env node */
 'use strict';
 
 module.exports = {
-	name: 'ember-task-scheduler',
+	name: require('./package').name,
 
 	importPolyfill(app) {
 		const polyfill = 'vendor/performance-polyfill.js';
@@ -21,5 +20,4 @@ module.exports = {
 		this.app = app;
 		this.importPolyfill(app);
 	}
-
 };
