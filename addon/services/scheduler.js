@@ -55,6 +55,23 @@ function exec(target, method, args, onError, stack) {
 	}
 }
 
+function _logWarn(title, stack, test, options) {
+	if (test) {
+		return;
+	}
+
+	const { groupCollapsed, log, trace, groupEnd } = console;
+
+	if (groupCollapsed && trace && groupEnd) {
+		groupCollapsed(title);
+		log(options.id);
+		trace(stack.stack);
+		groupEnd(title);
+	} else {
+		warn(`${title}\n${stack.stack}`, test, options);
+	}
+}
+
 /**
  * Service that schedules tasks into browser frames within a given FPS rate.
  *
@@ -378,9 +395,12 @@ export default Service.extend({
 		if (env === 'development') {
 			const diff = performance.now() - startTime;
 
-			warn(`Scheduled callback took too long (${diff} ms)\n${stack.stack}`,
+			_logWarn(
+				`Scheduled callback took too long (${diff} ms)`,
+				stack,
 				diff < millisecondsPerFrame,
-				{ id: 'ember-task-scheduler.services.callback-took-too-long' });
+				{ id: 'ember-task-scheduler.services.callback-took-too-long' }
+			);
 		}
 	},
 
