@@ -1,16 +1,13 @@
 import Ember from 'ember';
+import Service from '@ember/service';
+import { run } from '@ember/runloop';
+import { assert, warn } from '@ember/debug';
+import { computed } from '@ember/object';
+import { getOwner } from '@ember/application';
 
 const FPS = 60;
 const MILLISECONDS = 1000;
-const {
-	Service,
-	run,
-	assert,
-	computed,
-	warn,
-	onerror,
-	getOwner
-} = Ember;
+const { onerror, } = Ember;
 const {
 	requestAnimationFrame,
 	cancelAnimationFrame,
@@ -86,7 +83,7 @@ function _logWarn(title, stack, test, options) {
  *
  * @namespace App
  * @class SchedulerService
- * @extends Ember.Service
+ * @extends Service
  * @public
  */
 export default Service.extend({

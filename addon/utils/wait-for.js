@@ -1,6 +1,7 @@
-import Ember from 'ember';
-
-const { isPresent, typeOf } = Ember;
+import { isPresent } from '@ember/utils';
+import { typeOf } from '@ember/utils';
+import { assert } from '@ember/debug';
+import { Promise } from 'rsvp';
 
 const defaultWait = 50;
 const defaultTimeout = 0;
@@ -29,14 +30,14 @@ function runTimeout(func, wait) {
  * @method waitFor
  * @param  Function conditional
  * @param  Number wait
- * @return Ember.RSVP.Promise
+ * @return Promise
  * @public
  */
 export default function waitFor(conditional, wait = defaultWait, timeout = defaultTimeout) {
-	Ember.assert('First argument must be a function and return a boolean', conditional && typeOf(conditional) === 'function');
-	Ember.assert('Second argument must be a number', isPresent(wait) && typeOf(wait) === 'number');
+	assert('First argument must be a function and return a boolean', conditional && typeOf(conditional) === 'function');
+	assert('Second argument must be a number', isPresent(wait) && typeOf(wait) === 'number');
 
-	return new Ember.RSVP.Promise((resolve, reject) => {
+	return new Promise((resolve, reject) => {
 		let cancel = false;
 
 		function checkConditional() {

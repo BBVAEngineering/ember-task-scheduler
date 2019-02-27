@@ -1,17 +1,13 @@
 /* eslint no-magic-numbers:0 */
-import Ember from 'ember';
+import { run } from '@ember/runloop';
 import { moduleFor, test } from 'ember-qunit';
 import waitFor from 'ember-task-scheduler/utils/wait-for';
 import sinon from 'sinon';
 
-const environment = 'test';
-const { run } = Ember;
 let service;
 
 moduleFor('service:scheduler', 'Unit | Service | scheduler', {
 	beforeEach() {
-		this.register('config:environment', { environment });
-
 		service = this.subject({
 			onError(e) {
 				throw e;
