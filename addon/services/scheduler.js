@@ -52,7 +52,17 @@ function exec(target, method, args, onError, stack) {
 	}
 }
 
-function _logWarn(title, stack, test, options) {
+/**
+ * Logs a grouped stack trace.
+ *
+ * Fallback to warn() from @ember/debug
+ *
+ * @param  {String} title   Group title
+ * @param  {Object} stack   Stack trace
+ * @param  {Boolean} test   An optional boolean. If falsy, the warning will be displayed.
+ * @param  {Object} options Can be used to pass a unique `id` for this warning.
+ */
+function _logWarn(title, stack, test = false, options = {}) {
 	if (test) {
 		return;
 	}
