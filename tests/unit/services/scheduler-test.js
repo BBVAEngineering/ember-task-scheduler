@@ -7,7 +7,7 @@ import sinon from 'sinon';
 
 let service;
 
-module('Unit | Service | scheduler', function(hooks) {
+module('Unit | Service | scheduler', (hooks) => {
 	setupTest(hooks);
 
 	hooks.beforeEach(function() {
