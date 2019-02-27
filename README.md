@@ -2,14 +2,17 @@
 
 [![Build Status](https://travis-ci.org/BBVAEngineering/ember-task-scheduler.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-task-scheduler)
 [![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-task-scheduler.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-task-scheduler)
-[![npm version](https://badge.fury.io/js/ember-storages.svg)](https://badge.fury.io/js/ember-task-scheduler)
+[![NPM version](https://badge.fury.io/js/ember-task-scheduler.svg)](https://badge.fury.io/js/ember-task-scheduler)
 [![Dependency Status](https://david-dm.org/BBVAEngineering/ember-task-scheduler.svg)](https://david-dm.org/BBVAEngineering/ember-task-scheduler)
-
-An [ember-cli addon](http://www.ember-cli.com/) to schedule tasks to try to preserve 60 FPS rate on browsers.
+[![codecov](https://codecov.io/gh/BBVAEngineering/ember-task-scheduler/branch/master/graph/badge.svg)](https://codecov.io/gh/BBVAEngineering/ember-task-scheduler)
+[![Greenkeeper badge](https://badges.greenkeeper.io/BBVAEngineering/ember-task-scheduler.svg)](https://greenkeeper.io/)
+[![Ember Observer Score](https://emberobserver.com/badges/ember-task-scheduler.svg)](https://emberobserver.com/addons/ember-task-scheduler)
 
 ## Information
 
 [![NPM](https://nodei.co/npm/ember-task-scheduler.png?downloads=true&downloadRank=true)](https://nodei.co/npm/ember-task-scheduler/)
+
+An [ember-cli addon](http://www.ember-cli.com/) to schedule tasks to try to preserve 60 FPS rate on browsers.
 
 ## Install in ember-cli application
 
