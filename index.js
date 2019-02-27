@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint no-console:0 */
+
 module.exports = {
 	name: require('./package').name,
 
