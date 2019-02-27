@@ -7,7 +7,7 @@ import { getOwner } from '@ember/application';
 
 const FPS = 60;
 const MILLISECONDS = 1000;
-const { onerror, } = Ember;
+const { onerror } = Ember;
 const {
 	requestAnimationFrame,
 	cancelAnimationFrame,
