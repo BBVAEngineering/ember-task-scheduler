@@ -62,6 +62,7 @@ function exec(target, method, args, onError, stack) {
  * @param  {Boolean} test   An optional boolean. If falsy, the warning will be displayed.
  * @param  {Object} options Can be used to pass a unique `id` for this warning.
  */
+/* istanbul ignore next */
 function _logWarn(title, stack, test = false, options = {}) {
 	if (test) {
 		return;
@@ -389,6 +390,7 @@ export default Service.extend({
 		const onError = this.get('onError');
 		let startTime;
 
+		/* istanbul ignore next */
 		if (env === 'development') {
 			startTime = performance.now();
 		}
@@ -399,6 +401,7 @@ export default Service.extend({
 
 		run.end();
 
+		/* istanbul ignore next */
 		if (env === 'development') {
 			const diff = performance.now() - startTime;
 
@@ -435,7 +438,7 @@ export default Service.extend({
 			method = target[method];
 		}
 
-		const stack = env === 'development' ? new Error() : null;
+		const stack = env === 'development' ? /* istanbul ignore next */ new Error() : null;
 
 		assert('Could not find a valid method to call', method && typeof method === 'function');
 

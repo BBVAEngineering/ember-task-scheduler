@@ -2,7 +2,7 @@
 import { run } from '@ember/runloop';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import waitFor from 'ember-task-scheduler/utils/wait-for';
+import { waitUntil } from '@ember/test-helpers';
 import sinon from 'sinon';
 
 let service;
@@ -45,7 +45,7 @@ module('Unit | Service | scheduler', (hooks) => {
 
 		service.schedule(func);
 
-		return waitFor(() => !service.hasPendingTasks(), 0).then(() => {
+		return waitUntil(() => !service.hasPendingTasks()).then(() => {
 			assert.ok(func.verify(), 'func is called with arguments');
 		});
 	});
@@ -61,7 +61,7 @@ module('Unit | Service | scheduler', (hooks) => {
 
 		service.schedule(func);
 
-		return waitFor(() => !service.hasPendingTasks(), 0).then(() => {
+		return waitUntil(() => !service.hasPendingTasks()).then(() => {
 			assert.ok(onError.verify(), 'onError is called on error');
 		});
 	});
@@ -76,7 +76,7 @@ module('Unit | Service | scheduler', (hooks) => {
 
 		service.schedule(context, 'func', 'foo', 'bar');
 
-		return waitFor(() => !service.hasPendingTasks(), 0).then(() => {
+		return waitUntil(() => !service.hasPendingTasks()).then(() => {
 			assert.ok(func.verify(), 'func is called on context with arguments');
 		});
 	});
@@ -87,7 +87,7 @@ module('Unit | Service | scheduler', (hooks) => {
 
 		service.schedule(context, func, 'foo', 'bar');
 
-		return waitFor(() => !service.hasPendingTasks(), 0).then(() => {
+		return waitUntil(() => !service.hasPendingTasks()).then(() => {
 			assert.ok(func.verify(), 'func is called on context with arguments');
 		});
 	});
@@ -120,7 +120,7 @@ module('Unit | Service | scheduler', (hooks) => {
 		service.schedule(func);
 		service.schedule(func2);
 
-		return waitFor(() => !service.hasPendingTasks(), 0);
+		return waitUntil(() => !service.hasPendingTasks());
 	});
 
 	test('it schedules heavy tasks on several frames', (assert) => {
@@ -138,7 +138,7 @@ module('Unit | Service | scheduler', (hooks) => {
 		service.schedule(func);
 		service.schedule(func2);
 
-		return waitFor(() => !service.hasPendingTasks(), 0);
+		return waitUntil(() => !service.hasPendingTasks());
 	});
 
 	test('it continues executing next task when first fails', (assert) => {
@@ -154,7 +154,7 @@ module('Unit | Service | scheduler', (hooks) => {
 		service.schedule(func);
 		service.schedule(func2);
 
-		return waitFor(() => !service.hasPendingTasks(), 0);
+		return waitUntil(() => !service.hasPendingTasks());
 	});
 
 	test('it throttles same task and changes arguments', (assert) => {
@@ -166,7 +166,7 @@ module('Unit | Service | scheduler', (hooks) => {
 		service.schedule(context, 'func', 'foo');
 		service.scheduleOnce(context, 'func', 'bar');
 
-		return waitFor(() => !service.hasPendingTasks(), 0).then(() => {
+		return waitUntil(() => !service.hasPendingTasks()).then(() => {
 			assert.ok(func.verify(), 'func is called once with arguments');
 		});
 	});
@@ -178,7 +178,7 @@ module('Unit | Service | scheduler', (hooks) => {
 
 		service.cancel(func);
 
-		return waitFor(() => !service.hasPendingTasks(), 0).then(() => {
+		return waitUntil(() => !service.hasPendingTasks()).then(() => {
 			assert.ok(func.verify(), 'func is never called');
 		});
 	});
@@ -188,7 +188,7 @@ module('Unit | Service | scheduler', (hooks) => {
 
 		service.schedule(func);
 
-		return waitFor(() => !service.hasPendingTasks(), 0).then(() => {
+		return waitUntil(() => !service.hasPendingTasks()).then(() => {
 			service.cancel(func);
 
 			assert.ok(func.verify(), 'func is called');
@@ -203,7 +203,7 @@ module('Unit | Service | scheduler', (hooks) => {
 
 		service.schedule(func2);
 
-		return waitFor(() => !service.hasPendingTasks(), 0).then(() => {
+		return waitUntil(() => !service.hasPendingTasks()).then(() => {
 			assert.ok(func.verify(), 'func is called');
 		});
 	});
@@ -217,7 +217,7 @@ module('Unit | Service | scheduler', (hooks) => {
 		service.schedule(func2);
 		service.schedule(func);
 
-		return waitFor(() => !service.hasPendingTasks(), 0).then(() => {
+		return waitUntil(() => !service.hasPendingTasks()).then(() => {
 			assert.ok(func.verify(), 'func is called');
 		});
 	});
@@ -230,40 +230,8 @@ module('Unit | Service | scheduler', (hooks) => {
 
 		service.schedule(func2);
 
-		return waitFor(() => !service.hasPendingTasks(), 0).then(() => {
+		return waitUntil(() => !service.hasPendingTasks()).then(() => {
 			assert.ok(func.verify(), 'func is called');
-		});
-	});
-
-	module('Debugging', (hooksDeb) => {
-		hooksDeb.beforeEach(function() {
-			this.owner.register('config:environment', { environment: 'development' });
-
-			this.origGroupCollapsed = console.groupCollapsed;
-			this.origTrace = console.trace;
-			this.origGroupEnd = console.groupEnd;
-		});
-
-		hooksDeb.afterEach(function() {
-			this.owner.unregister('config:environment');
-
-			console.groupCollapsed = this.origGroupCollapsed;
-			console.trace = this.origTrace;
-			console.groupEnd = this.origGroupEnd;
-		});
-
-		test('it calls _logWarn and the console functions', async(assert) => {
-			assert.expect(3);
-
-			service.set('millisecondsPerFrame', 0);
-
-			console.groupCollapsed = () => assert.ok(true, 'console.groupCollapsed() is called');
-			console.trace = () => assert.ok(true, 'console.trace() is called');
-			console.groupEnd = () => assert.ok(true, 'console.groupEnd() is called');
-
-			const func = () => {};
-
-			await service.schedule(func);
 		});
 	});
 });
