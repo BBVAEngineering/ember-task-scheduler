@@ -222,7 +222,7 @@ module('Unit | Service | scheduler', (hooks) => {
 		});
 	});
 
-	test('it schedules a task inside a full ember run lopp', (assert) => {
+	test('it schedules a task inside a full ember run loop', (assert) => {
 		const func = sinon.mock().once();
 		const func2 = () => {
 			run.scheduleOnce('afterRender', func);
@@ -232,6 +232,38 @@ module('Unit | Service | scheduler', (hooks) => {
 
 		return waitFor(() => !service.hasPendingTasks(), 0).then(() => {
 			assert.ok(func.verify(), 'func is called');
+		});
+	});
+
+	module('Debugging', (hooksDeb) => {
+		hooksDeb.beforeEach(function() {
+			this.owner.register('config:environment', { environment: 'development' });
+
+			this.origGroupCollapsed = console.groupCollapsed;
+			this.origTrace = console.trace;
+			this.origGroupEnd = console.groupEnd;
+		});
+
+		hooksDeb.afterEach(function() {
+			this.owner.unregister('config:environment');
+
+			console.groupCollapsed = this.origGroupCollapsed;
+			console.trace = this.origTrace;
+			console.groupEnd = this.origGroupEnd;
+		});
+
+		test('it calls _logWarn and the console functions', async(assert) => {
+			assert.expect(3);
+
+			service.set('millisecondsPerFrame', 0);
+
+			console.groupCollapsed = () => assert.ok(true, 'console.groupCollapsed() is called');
+			console.trace = () => assert.ok(true, 'console.trace() is called');
+			console.groupEnd = () => assert.ok(true, 'console.groupEnd() is called');
+
+			const func = () => {};
+
+			await service.schedule(func);
 		});
 	});
 });
