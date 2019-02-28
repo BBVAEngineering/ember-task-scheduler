@@ -46,7 +46,7 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "ember-cli-babel": "^7.1.2"
+    "ember-cli-babel": "^7.5.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^7.5.2",
@@ -76,7 +76,7 @@
     "ember-sinon": "^3.1.0",
     "ember-source": "~3.8.0",
     "ember-source-channel-url": "^1.1.0",
-    "ember-try": "^1.1.0",
+    "ember-try": "~0.2.23",
     "eslint": "^5.14.1",
     "eslint-config-bbva": "^2.0.3",
     "eslint-plugin-ember": "^6.2.0",
