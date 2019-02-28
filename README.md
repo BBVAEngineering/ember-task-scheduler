@@ -9,7 +9,7 @@ An [ember-cli addon](http://www.ember-cli.com/) to schedule tasks to try to pres
 
 ## Information
 
-[![NPM](https://nodei.co/npm/ember-task-scheduler.png?downloads=true&downloadRank=true)](https://nodei.co/npm/ember-task-scheduler/)
+[![NPM](https://nodei.co/npm/ember-task-scheduler.png?downloads=true&downloadRank=true)](https://nodei.co/npm/ember-task-scheduler/) [![Greenkeeper badge](https://badges.greenkeeper.io/BBVAEngineering/ember-task-scheduler.svg)](https://greenkeeper.io/)
 
 ## Install in ember-cli application
 
