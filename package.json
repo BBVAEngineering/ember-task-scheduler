@@ -1,6 +1,6 @@
 {
   "name": "ember-task-scheduler",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "An Ember CLI addon to schedule tasks to try to preserve 60 FPS rate on browsers.",
   "keywords": [
     "ember-addon"
