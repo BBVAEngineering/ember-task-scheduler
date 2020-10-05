@@ -12,7 +12,16 @@
 
 [![NPM](https://nodei.co/npm/ember-task-scheduler.png?downloads=true&downloadRank=true)](https://nodei.co/npm/ember-task-scheduler/)
 
+<<<<<<< HEAD
 An [ember-cli addon](http://www.ember-cli.com/) to schedule tasks to try to preserve 60 FPS rate on browsers.
+||||||| parent of 72ed8ff... v3.10.0...v3.21.2
+* Ember.js v2.18 or above
+* Ember CLI v2.13 or above
+=======
+* Ember.js v3.16 or above
+* Ember CLI v2.13 or above
+* Node.js v10 or above
+>>>>>>> 72ed8ff... v3.10.0...v3.21.2
 
 ## Install in ember-cli application
 

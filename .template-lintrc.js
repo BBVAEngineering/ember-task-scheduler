@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+<<<<<<< HEAD
 	extends: 'recommended',
 	rules: {
 		'no-bare-strings': true,
@@ -20,4 +21,9 @@ module.exports = {
 		'no-inline-styles': true,
 		'simple-unless': false
 	}
+||||||| parent of 72ed8ff... v3.10.0...v3.21.2
+  extends: 'recommended'
+=======
+  extends: 'octane'
+>>>>>>> 72ed8ff... v3.10.0...v3.21.2
 };
