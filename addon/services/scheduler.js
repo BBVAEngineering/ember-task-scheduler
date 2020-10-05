@@ -68,13 +68,11 @@ function _logWarn(title, stack, test = false, options = {}) {
 		return;
 	}
 
-	const { groupCollapsed, log, trace, groupEnd } = console;
-
-	if (groupCollapsed && trace && groupEnd) {
-		groupCollapsed(title);
-		log(options.id);
-		trace(stack.stack);
-		groupEnd(title);
+	if (console.groupCollapsed && console.trace && console.groupEnd) {
+		console.groupCollapsed(title);
+		console.log(options.id);
+		console.trace(stack.stack);
+		console.groupEnd(title);
 	} else {
 		warn(`${title}\n${stack.stack}`, test, options);
 	}
