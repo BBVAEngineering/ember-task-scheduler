@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/BBVAEngineering/ember-task-scheduler/compare/v2.1.1...v2.2.0) (2020-10-05)
+
+
+### Features
+
+* **deps:** update to latest ([6e0c0cd](https://github.com/BBVAEngineering/ember-task-scheduler/commit/6e0c0cda9d8b7b1c21602d98f8de7ffa936646af))
+
 ## [2.1.1](https://github.com/BBVAEngineering/ember-task-scheduler/compare/v2.1.0...v2.1.1) (2020-10-05)
 
 
