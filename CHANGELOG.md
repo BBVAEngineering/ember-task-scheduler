@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/BBVAEngineering/ember-task-scheduler/compare/v2.1.0...v2.1.1) (2020-10-05)
+
+
+### Bug Fixes
+
+* **scheduler:** use console methods with context ([9a8f709](https://github.com/BBVAEngineering/ember-task-scheduler/commit/9a8f709))
+
 # [2.1.0](https://github.com/BBVAEngineering/ember-task-scheduler/compare/v2.0.0...v2.1.0) (2020-02-28)
 
 
