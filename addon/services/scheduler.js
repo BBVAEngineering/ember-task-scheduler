@@ -176,7 +176,7 @@ export default Service.extend({
 	 * @public
 	 */
 	hasPendingTasks() {
-		return this.get('_tasks.length') !== 0;
+		return this._tasks.length !== 0;
 	},
 
 	/**
@@ -282,6 +282,7 @@ export default Service.extend({
 			if (currentTarget === target && currentMethod === method) {
 				tasks[i][2] = args; // replace args
 				tasks[i][3] = stack; // eslint-disable-line no-magic-numbers
+
 				return;
 			}
 		}
@@ -340,6 +341,7 @@ export default Service.extend({
 	 * @private
 	 */
 	_loop(startTime) {
+		// istanbul ignore if: lifecycle
 		if (this.isDestroyed) {
 			return;
 		}
@@ -357,12 +359,14 @@ export default Service.extend({
 		} while (!this.isDestroyed && tasks.length > 0 && performance.now() - startTime < millisecondsPerFrame);
 
 		// After exec, service could be destroyed. Recheck.
+		// istanbul ignore if: lifecycle
 		if (this.isDestroyed) {
 			return;
 		}
 
 		if (tasks.length > 0) {
 			this._next();
+
 			return;
 		}
 
@@ -384,7 +388,7 @@ export default Service.extend({
 	 * @private
 	 */
 	_exec(target, method, args, stack) {
-		const env = this.get('config.environment');
+		const env = this.config.environment;
 		const millisecondsPerFrame = this.millisecondsPerFrame;
 		const onError = this.onError;
 		let startTime;
@@ -425,7 +429,7 @@ export default Service.extend({
 	 * @private
 	 */
 	_sliceArguments(target, method, ...args) {
-		const env = this.get('config.environment');
+		const env = this.config.environment;
 		const length = arguments.length;
 
 		if (length === 1) {

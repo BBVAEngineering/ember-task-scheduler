@@ -40,7 +40,6 @@
     "start": "ember serve",
     "test": "npm-run-all lint:* test:*",
     "test:ember": "COVERAGE=true ember test",
-    "test:ember-compatibility": "ember try:each",
     "check-coverage": "istanbul check-coverage coverage/coverage-final.json --statements 100 --branches 100 --functions 100 --lines 100",
     "commit": "git-cz",
     "posttest": "npm run report-coverage && npm run check-coverage && npm run validate-coverage",

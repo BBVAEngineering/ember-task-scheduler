@@ -1,27 +1,16 @@
 # ember-task-scheduler
 
 [![Build Status](https://travis-ci.org/BBVAEngineering/ember-task-scheduler.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-task-scheduler)
-[![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-task-scheduler.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-task-scheduler)
 [![NPM version](https://badge.fury.io/js/ember-task-scheduler.svg)](https://badge.fury.io/js/ember-task-scheduler)
 [![Dependency Status](https://david-dm.org/BBVAEngineering/ember-task-scheduler.svg)](https://david-dm.org/BBVAEngineering/ember-task-scheduler)
 [![codecov](https://codecov.io/gh/BBVAEngineering/ember-task-scheduler/branch/master/graph/badge.svg)](https://codecov.io/gh/BBVAEngineering/ember-task-scheduler)
-[![Greenkeeper badge](https://badges.greenkeeper.io/BBVAEngineering/ember-task-scheduler.svg)](https://greenkeeper.io/)
 [![Ember Observer Score](https://emberobserver.com/badges/ember-task-scheduler.svg)](https://emberobserver.com/addons/ember-task-scheduler)
 
 ## Information
 
 [![NPM](https://nodei.co/npm/ember-task-scheduler.png?downloads=true&downloadRank=true)](https://nodei.co/npm/ember-task-scheduler/)
 
-<<<<<<< HEAD
 An [ember-cli addon](http://www.ember-cli.com/) to schedule tasks to try to preserve 60 FPS rate on browsers.
-||||||| parent of 72ed8ff... v3.10.0...v3.21.2
-* Ember.js v2.18 or above
-* Ember CLI v2.13 or above
-=======
-* Ember.js v3.16 or above
-* Ember CLI v2.13 or above
-* Node.js v10 or above
->>>>>>> 72ed8ff... v3.10.0...v3.21.2
 
 ## Install in ember-cli application
 
@@ -57,8 +46,8 @@ To setup, you can set the following variables on `config/environment` file:
 
 ```json
 {
-taskScheduler: {
-    FPS: 60
+"taskScheduler": {
+    "FPS": 60
   }
 }
 
