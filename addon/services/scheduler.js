@@ -1,3 +1,4 @@
+import { reads } from '@ember/object/computed';
 import Ember from 'ember';
 import Service from '@ember/service';
 import { run } from '@ember/runloop';
@@ -114,7 +115,7 @@ export default Service.extend({
 	 * @type Number
 	 * @public
 	 */
-	FPS: computed.reads('config.taskScheduler.FPS'),
+	FPS: reads('config.taskScheduler.FPS'),
 
 	/**
 	 * On error hook executed when a task fails.
@@ -151,7 +152,7 @@ export default Service.extend({
 	 * @public
 	 */
 	millisecondsPerFrame: computed('FPS', function() {
-		const fps = this.get('FPS') || FPS;
+		const fps = this.FPS || FPS;
 
 		return 1 / fps * MILLISECONDS;
 	}),
@@ -175,7 +176,7 @@ export default Service.extend({
 	 * @public
 	 */
 	hasPendingTasks() {
-		return this.get('_tasks.length') !== 0;
+		return this._tasks.length !== 0;
 	},
 
 	/**
@@ -190,8 +191,8 @@ export default Service.extend({
 	 * @public
 	 */
 	schedule() {
-		const tasks = this.get('_tasks');
-		const currentInstance = this.get('_currentInstance');
+		const tasks = this._tasks;
+		const currentInstance = this._currentInstance;
 
 		tasks.push(this._sliceArguments(...arguments));
 
@@ -212,7 +213,7 @@ export default Service.extend({
 	 * @public
 	 */
 	scheduleOnce() {
-		const currentInstance = this.get('_currentInstance');
+		const currentInstance = this._currentInstance;
 
 		this._pushUnique(this._sliceArguments(...arguments));
 
@@ -233,9 +234,9 @@ export default Service.extend({
 	 * @public
 	 */
 	cancel() {
-		const currentInstance = this.get('_currentInstance');
+		const currentInstance = this._currentInstance;
 		const [target, method] = this._sliceArguments(...arguments);
-		const tasks = this.get('_tasks');
+		const tasks = this._tasks;
 		const removedTasks = [];
 		const removedIndexes = [];
 
@@ -273,7 +274,7 @@ export default Service.extend({
 	 */
 	_pushUnique(params) {
 		const [target, method, args, stack] = params;
-		const tasks = this.get('_tasks');
+		const tasks = this._tasks;
 
 		for (let i = 0; i < tasks.length; i++) {
 			const [currentTarget, currentMethod] = tasks[i];
@@ -281,6 +282,7 @@ export default Service.extend({
 			if (currentTarget === target && currentMethod === method) {
 				tasks[i][2] = args; // replace args
 				tasks[i][3] = stack; // eslint-disable-line no-magic-numbers
+
 				return;
 			}
 		}
@@ -295,7 +297,7 @@ export default Service.extend({
 	 * @private
 	 */
 	_begin() {
-		assert('Could not schedule a new frame. Scheduler instance is already started', !this.get('_currentInstance'));
+		assert('Could not schedule a new frame. Scheduler instance is already started', !this._currentInstance);
 
 		this.set('_currentInstance', scheduleFrame(this, '_loop'));
 	},
@@ -307,7 +309,7 @@ export default Service.extend({
 	 * @private
 	 */
 	_next() {
-		assert('Could not schedule next frame. Scheduler instance is not running', this.get('_currentInstance'));
+		assert('Could not schedule next frame. Scheduler instance is not running', this._currentInstance);
 		assert('Could not schedule next frame. Scheduler has no tasks', this.hasPendingTasks());
 
 		this.set('_currentInstance', scheduleFrame(this, '_loop'));
@@ -322,7 +324,7 @@ export default Service.extend({
 	 * @private
 	 */
 	_end() {
-		const currentInstance = this.get('_currentInstance');
+		const currentInstance = this._currentInstance;
 
 		assert('Could not stop scheduler. Service instance is not running', currentInstance);
 
@@ -339,12 +341,13 @@ export default Service.extend({
 	 * @private
 	 */
 	_loop(startTime) {
+		// istanbul ignore if: lifecycle
 		if (this.isDestroyed) {
 			return;
 		}
 
-		const millisecondsPerFrame = this.get('millisecondsPerFrame');
-		const tasks = this.get('_tasks');
+		const millisecondsPerFrame = this.millisecondsPerFrame;
+		const tasks = this._tasks;
 		let target, method, args, stack;
 
 		assert('Could not run current loop. Service instance has no tasks.', tasks.length !== 0);
@@ -356,16 +359,18 @@ export default Service.extend({
 		} while (!this.isDestroyed && tasks.length > 0 && performance.now() - startTime < millisecondsPerFrame);
 
 		// After exec, service could be destroyed. Recheck.
+		// istanbul ignore if: lifecycle
 		if (this.isDestroyed) {
 			return;
 		}
 
 		if (tasks.length > 0) {
 			this._next();
+
 			return;
 		}
 
-		const currentInstance = this.get('_currentInstance');
+		const currentInstance = this._currentInstance;
 
 		if (currentInstance) {
 			this._end();
@@ -383,9 +388,9 @@ export default Service.extend({
 	 * @private
 	 */
 	_exec(target, method, args, stack) {
-		const env = this.get('config.environment');
-		const millisecondsPerFrame = this.get('millisecondsPerFrame');
-		const onError = this.get('onError');
+		const env = this.config.environment;
+		const millisecondsPerFrame = this.millisecondsPerFrame;
+		const onError = this.onError;
 		let startTime;
 
 		/* istanbul ignore next */
@@ -424,7 +429,7 @@ export default Service.extend({
 	 * @private
 	 */
 	_sliceArguments(target, method, ...args) {
-		const env = this.get('config.environment');
+		const env = this.config.environment;
 		const length = arguments.length;
 
 		if (length === 1) {
