@@ -22,18 +22,18 @@ In your application's directory:
 
 ```javascript
 // Inject the service
-scheduler: Ember.inject.service(),
+@service scheduler;
 ```
 
 ```javascript
 // To schedule a callback you can use the same syntax as with Ember.run.
-this.get('scheduler').schedule(this, 'method', arg1, arg2);
+this.scheduler.schedule(this, 'method', arg1, arg2);
 
 // To schedule a unique method.
-this.get('scheduler').scheduleOnce(this, 'method', arg1, arg2);
+this.scheduler.scheduleOnce(this, 'method', arg1, arg2);
 
 // You can also run callbacks without context.
-this.get('scheduler').schedule(() => {
+this.scheduler.schedule(() => {
   // Do job here.
 });
 
