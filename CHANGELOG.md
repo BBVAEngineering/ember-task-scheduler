@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/BBVAEngineering/ember-task-scheduler/compare/v2.2.0...v2.3.0) (2021-01-14)
+
+
+### Features
+
+* **deps:** move ember-cli-htmlbars to devDependencies ([01efceb](https://github.com/BBVAEngineering/ember-task-scheduler/commit/01efcebd1dd959f82128601dc1e8c596baf75aa4))
+
 # [2.2.0](https://github.com/BBVAEngineering/ember-task-scheduler/compare/v2.1.1...v2.2.0) (2020-10-05)
 
 
