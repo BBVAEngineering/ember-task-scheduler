@@ -1,6 +1,6 @@
 # ember-task-scheduler
 
-[![Build Status](https://travis-ci.org/BBVAEngineering/ember-task-scheduler.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-task-scheduler)
+[![CI](https://github.com/BBVAEngineering/ember-task-scheduler/actions/workflows/ci.yml/badge.svg)](https://github.com/BBVAEngineering/ember-task-scheduler/actions/workflows/ci.yml)
 [![NPM version](https://badge.fury.io/js/ember-task-scheduler.svg)](https://badge.fury.io/js/ember-task-scheduler)
 [![Dependency Status](https://david-dm.org/BBVAEngineering/ember-task-scheduler.svg)](https://david-dm.org/BBVAEngineering/ember-task-scheduler)
 [![codecov](https://codecov.io/gh/BBVAEngineering/ember-task-scheduler/branch/master/graph/badge.svg)](https://codecov.io/gh/BBVAEngineering/ember-task-scheduler)
@@ -46,11 +46,10 @@ To setup, you can set the following variables on `config/environment` file:
 
 ```json
 {
-"taskScheduler": {
+  "taskScheduler": {
     "FPS": 60
   }
 }
-
 ```
 
 If variables are unset, the will default to above configuration.
@@ -70,7 +69,6 @@ If you want to contribute to this addon, please read the [CONTRIBUTING.md](CONTR
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/BBVAEngineering/ember-task-scheduler/tags).
-
 
 ## Authors
 
