@@ -1,280 +1,311 @@
 /* eslint no-magic-numbers:0 */
-import { run } from '@ember/runloop';
+import { scheduleOnce } from '@ember/runloop';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { waitUntil } from '@ember/test-helpers';
+import { settled, waitUntil } from '@ember/test-helpers';
 import sinon from 'sinon';
 
-let service;
-
 module('Unit | Service | scheduler', (hooks) => {
-	setupTest(hooks);
+  setupTest(hooks);
 
-	hooks.beforeEach(function() {
-		service = this.owner.factoryFor('service:scheduler').create({
-			onError(e) {
-				throw e;
-			}
-		});
-	});
+  hooks.beforeEach(function () {
+    this.service = this.owner.factoryFor('service:scheduler').create({
+      onError(e) {
+        throw e;
+      },
+    });
+  });
 
-	test('it computes milliseconds per frame', (assert) => {
-		service.set('FPS', 60);
+  hooks.afterEach(async function () {
+    await waitUntil(() => !this.service.hasPendingTasks());
+  });
 
-		assert.equal(service.get('millisecondsPerFrame'), 1 / 60 * 1000);
+  test('it computes milliseconds per frame', function (assert) {
+    this.service.FPS = 60;
 
-		service.set('FPS', 30);
+    assert.equal(this.service.millisecondsPerFrame, (1 / 60) * 1000);
 
-		assert.equal(service.get('millisecondsPerFrame'), 1 / 30 * 1000);
-	});
+    this.service.FPS = 30;
 
-	test('it starts without tasks', (assert) => {
-		assert.notOk(service.hasPendingTasks(), 'service has no pending tasks');
-	});
+    assert.equal(this.service.millisecondsPerFrame, (1 / 30) * 1000);
+  });
 
-	test('it returns when there are pending tasks', (assert) => {
-		const func = () => {};
+  test('it starts without tasks', function (assert) {
+    assert.notOk(
+      this.service.hasPendingTasks(),
+      'service has no pending tasks'
+    );
+  });
 
-		service.schedule(func);
+  test('it returns when there are pending tasks', function (assert) {
+    const func = () => {};
 
-		assert.ok(service.hasPendingTasks(), 'service has pending tasks');
-	});
+    this.service.schedule(func);
 
-	test('it schedules a task by function', async(assert) => {
-		const func = sinon.mock().once();
+    assert.ok(this.service.hasPendingTasks(), 'service has pending tasks');
+  });
 
-		service.schedule(func);
+  test('it schedules a task by function', async function (assert) {
+    const func = sinon.mock().once();
 
-		await waitUntil(() => !service.hasPendingTasks());
+    this.service.schedule(func);
 
-		assert.ok(func.verify(), 'func is called with arguments');
-	});
+    await waitUntil(() => !this.service.hasPendingTasks());
 
-	test('it calls onError on task error', async(assert) => {
-		const error = new Error();
-		const onError = sinon.mock().once().withArgs(error);
-		const func = () => {
-			throw error;
-		};
+    assert.ok(func.verify(), 'func is called with arguments');
+  });
 
-		service.set('onError', onError);
+  test('it calls onError on task error', async function (assert) {
+    const error = new Error();
+    const onError = sinon.mock().once().withArgs(error);
+    const func = () => {
+      throw error;
+    };
 
-		service.schedule(func);
+    this.service.onError = onError;
 
-		await waitUntil(() => !service.hasPendingTasks());
+    this.service.schedule(func);
 
-		assert.ok(onError.verify(), 'onError is called on error');
-	});
+    await waitUntil(() => !this.service.hasPendingTasks());
 
-	test('it schedules a task by object and method string with arguments', async(assert) => {
-		const func = sinon.mock().once().withArgs('foo', 'bar');
-		const context = {
-			func
-		};
+    assert.ok(onError.verify(), 'onError is called on error');
+  });
 
-		func.on(context);
+  test('it schedules a task by object and method string with arguments', async function (assert) {
+    const func = sinon.mock().once().withArgs('foo', 'bar');
+    const context = {
+      func,
+    };
 
-		service.schedule(context, 'func', 'foo', 'bar');
+    func.on(context);
 
-		await waitUntil(() => !service.hasPendingTasks());
+    this.service.schedule(context, 'func', 'foo', 'bar');
 
-		assert.ok(func.verify(), 'func is called on context with arguments');
-	});
+    await waitUntil(() => !this.service.hasPendingTasks());
 
-	test('it schedules a task by object and method function with arguments', async(assert) => {
-		const context = Object.create(null);
-		const func = sinon.mock().once().on(context).withArgs('foo', 'bar');
+    assert.ok(func.verify(), 'func is called on context with arguments');
+  });
 
-		service.schedule(context, func, 'foo', 'bar');
+  test('it schedules a task by object and method function with arguments', async function (assert) {
+    const context = Object.create(null);
+    const func = sinon.mock().once().on(context).withArgs('foo', 'bar');
 
-		await waitUntil(() => !service.hasPendingTasks());
+    this.service.schedule(context, func, 'foo', 'bar');
 
-		assert.ok(func.verify(), 'func is called on context with arguments');
-	});
+    await waitUntil(() => !this.service.hasPendingTasks());
 
-	test('it throws an error when cannot find a method', (assert) => {
-		assert.throws(() => {
-			service.schedule(null, 'func', 'foo', 'bar');
-		}, 'error is thrown when method on target is null');
+    assert.ok(func.verify(), 'func is called on context with arguments');
+  });
 
-		assert.throws(() => {
-			service.schedule({ func: 'method' }, 'func', 'foo', 'bar');
-		}, 'error is thrown when method on target is not a function');
+  test('it throws an error when cannot find a method', function (assert) {
+    assert.throws(() => {
+      this.service.schedule(null, 'func', 'foo', 'bar');
+    }, 'error is thrown when method on target is null');
 
-		assert.throws(() => {
-			service.schedule();
-		}, 'error is thrown when called without method');
-	});
+    assert.throws(() => {
+      this.service.schedule({ func: 'method' }, 'func', 'foo', 'bar');
+    }, 'error is thrown when method on target is not a function');
 
-	test('it schedules small tasks on same frame', async(assert) => {
-		let currentInstance;
-		const func = () => {
-			currentInstance = service.get('_currentInstance');
-		};
-		const func2 = () => {
-			assert.equal(service.get('_currentInstance'), currentInstance, 'function executes on same frame');
-		};
+    assert.throws(() => {
+      this.service.schedule();
+    }, 'error is thrown when called without method');
+  });
 
-		service.set('FPS', 15); // configure scheduler to prevent slow computing fail.
+  test('it schedules small tasks on same frame', async function (assert) {
+    assert.expect(1);
 
-		service.schedule(func);
-		service.schedule(func2);
+    let currentInstance;
+    const func = () => {
+      currentInstance = this.service._currentInstance;
+    };
+    const func2 = () => {
+      assert.equal(
+        this.service._currentInstance,
+        currentInstance,
+        'function executes on same frame'
+      );
+    };
 
-		await waitUntil(() => !service.hasPendingTasks());
-	});
+    this.service.FPS = 15; // configure scheduler to prevent slow computing fail.
 
-	test('it schedules heavy tasks on several frames', async(assert) => {
-		let currentInstance;
-		const func = () => {
-			currentInstance = service.get('_currentInstance');
-			Array(10000000).fill(0); // eslint-disable-line no-magic-numbers
-		};
-		const func2 = () => {
-			assert.notEqual(service.get('_currentInstance'), currentInstance, 'function executes on next frame');
-		};
+    this.service.schedule(func);
+    this.service.schedule(func2);
 
-		service.set('FPS', 120); // configure scheduler to prevent slow computing fail.
+    await waitUntil(() => !this.service.hasPendingTasks());
+  });
 
-		service.schedule(func);
-		service.schedule(func2);
+  test('it schedules heavy tasks on several frames', async function (assert) {
+    assert.expect(1);
 
-		await waitUntil(() => !service.hasPendingTasks());
-	});
+    let currentInstance;
+    const func = () => {
+      currentInstance = this.service._currentInstance;
+      Array(10000000).fill(0); // eslint-disable-line no-magic-numbers
+    };
+    const func2 = () => {
+      assert.notEqual(
+        this.service._currentInstance,
+        currentInstance,
+        'function executes on next frame'
+      );
+    };
 
-	test('it continues executing next task when first fails', async(assert) => {
-		const func = () => {
-			throw new Error();
-		};
-		const func2 = () => {
-			assert.ok(true, 'func2 is called');
-		};
+    this.service.FPS = 120; // configure scheduler to prevent slow computing fail.
 
-		service.set('onError', null);
+    this.service.schedule(func);
+    this.service.schedule(func2);
 
-		service.schedule(func);
-		service.schedule(func2);
+    await waitUntil(() => !this.service.hasPendingTasks());
+  });
 
-		await waitUntil(() => !service.hasPendingTasks());
-	});
+  test('it continues executing next task when first fails', async function (assert) {
+    assert.expect(1);
 
-	test('it throttles same task and changes arguments', async(assert) => {
-		const func = sinon.mock().once().withArgs('bar');
-		const context = {
-			func
-		};
+    const func = () => {
+      throw new Error();
+    };
+    const func2 = () => {
+      assert.ok(true, 'func2 is called');
+    };
 
-		service.schedule(context, 'func', 'foo');
-		service.scheduleOnce(context, 'func', 'bar');
+    this.service.onError = null;
 
-		await waitUntil(() => !service.hasPendingTasks());
+    this.service.schedule(func);
+    this.service.schedule(func2);
 
-		assert.ok(func.verify(), 'func is called once with arguments');
-	});
+    await waitUntil(() => !this.service.hasPendingTasks());
+  });
 
-	test('it cancels a pending task', async(assert) => {
-		const func = sinon.mock().never();
+  test('it throttles same task and changes arguments', async function (assert) {
+    const func = sinon.mock().once().withArgs('bar');
+    const context = {
+      func,
+    };
 
-		service.schedule(func);
+    this.service.schedule(context, 'func', 'foo');
+    this.service.scheduleOnce(context, 'func', 'bar');
 
-		service.cancel(func);
+    await waitUntil(() => !this.service.hasPendingTasks());
 
-		await waitUntil(() => !service.hasPendingTasks());
+    assert.ok(func.verify(), 'func is called once with arguments');
+  });
 
-		assert.ok(func.verify(), 'func is never called');
-	});
+  test('it cancels a pending task', async function (assert) {
+    const func = sinon.mock().never();
 
-	test('it cannot cancel a finished task', async(assert) => {
-		const func = sinon.mock().once();
+    this.service.schedule(func);
 
-		service.schedule(func);
+    this.service.cancel(func);
 
-		await waitUntil(() => !service.hasPendingTasks());
+    await waitUntil(() => !this.service.hasPendingTasks());
 
-		service.cancel(func);
+    assert.ok(func.verify(), 'func is never called');
+  });
 
-		assert.ok(func.verify(), 'func is called');
-	});
+  test('it cannot cancel a finished task', async function (assert) {
+    const func = sinon.mock().once();
 
-	test('it can schedule a task inside another task on same frame', async(assert) => {
-		const func = sinon.mock().once();
-		const func2 = () => {
-			service.schedule(func);
-		};
+    this.service.schedule(func);
 
-		service.schedule(func2);
+    await waitUntil(() => !this.service.hasPendingTasks());
 
-		await waitUntil(() => !service.hasPendingTasks());
+    this.service.cancel(func);
 
-		assert.ok(func.verify(), 'func is called');
-	});
+    assert.ok(func.verify(), 'func is called');
+  });
 
-	test('it can cancel a task inside another task', async(assert) => {
-		const func = sinon.mock().never();
-		const func2 = () => {
-			service.cancel(func);
-		};
+  test('it can schedule a task inside another task on same frame', async function (assert) {
+    const func = sinon.mock().once();
+    const func2 = () => {
+      this.service.schedule(func);
+    };
 
-		service.schedule(func2);
-		service.schedule(func);
+    this.service.schedule(func2);
 
-		await waitUntil(() => !service.hasPendingTasks());
+    await waitUntil(() => !this.service.hasPendingTasks());
 
-		assert.ok(func.verify(), 'func is called');
-	});
+    assert.ok(func.verify(), 'func is called');
+  });
 
-	test('it schedules a task inside a full ember run loop', async(assert) => {
-		const func = sinon.mock().once();
-		const func2 = () => {
-			run.scheduleOnce('afterRender', func);
-		};
+  test('it can cancel a task inside another task', async function (assert) {
+    const func = sinon.mock().never();
+    const func2 = () => {
+      this.service.cancel(func);
+    };
 
-		service.schedule(func2);
+    this.service.schedule(func2);
+    this.service.schedule(func);
 
-		await waitUntil(() => !service.hasPendingTasks());
+    await waitUntil(() => !this.service.hasPendingTasks());
 
-		assert.ok(func.verify(), 'func is called');
-	});
+    assert.ok(func.verify(), 'func is called');
+  });
 
-	test('it does not cancels a pending task if does not match', async(assert) => {
-		const func = sinon.mock().once();
+  test('it schedules a task inside a full ember run loop', async function (assert) {
+    const func = sinon.mock().once();
+    const func2 = () => {
+      scheduleOnce('afterRender', func);
+    };
 
-		service.schedule(func);
+    this.service.schedule(func2);
 
-		service.cancel(() => {});
+    await waitUntil(() => !this.service.hasPendingTasks());
 
-		await waitUntil(() => !service.hasPendingTasks());
+    assert.ok(func.verify(), 'func is called');
+  });
 
-		assert.ok(func.verify(), 'func is called once');
-	});
+  test('it does not cancels a pending task if does not match', async function (assert) {
+    const func = sinon.mock().once();
 
-	test('it throttles same task and changes arguments', async(assert) => {
-		const func = sinon.mock().once().withArgs('bar');
-		const context = {
-			func
-		};
+    this.service.schedule(func);
 
-		service.scheduleOnce(context, 'func', 'foo');
-		service.scheduleOnce(context, 'func', 'bar');
+    this.service.cancel(() => {});
 
-		await waitUntil(() => !service.hasPendingTasks());
+    await waitUntil(() => !this.service.hasPendingTasks());
 
-		assert.ok(func.verify(), 'func is called once with arguments');
-	});
+    assert.ok(func.verify(), 'func is called once');
+  });
 
-	test('it does not throttle two different tasks', async(assert) => {
-		const func1 = sinon.stub();
-		const func2 = sinon.stub();
-		const context = {
-			func1,
-			func2
-		};
+  test('it throttles same task and changes arguments with once', async function (assert) {
+    const func = sinon.mock().once().withArgs('bar');
+    const context = {
+      func,
+    };
 
-		service.scheduleOnce(context, 'func1', 'foo');
-		service.scheduleOnce(context, 'func2', 'bar');
+    this.service.scheduleOnce(context, 'func', 'foo');
+    this.service.scheduleOnce(context, 'func', 'bar');
 
-		await waitUntil(() => !service.hasPendingTasks());
+    await waitUntil(() => !this.service.hasPendingTasks());
 
-		assert.ok(func1.calledOnce, 'func1 is called once with arguments');
-		assert.ok(func2.calledOnce, 'func2 is called once with arguments');
-	});
+    assert.ok(func.verify(), 'func is called once with arguments');
+  });
+
+  test('it does not throttle two different tasks', async function (assert) {
+    const func1 = sinon.stub();
+    const func2 = sinon.stub();
+    const context = {
+      func1,
+      func2,
+    };
+
+    this.service.scheduleOnce(context, 'func1', 'foo');
+    this.service.scheduleOnce(context, 'func2', 'bar');
+
+    await waitUntil(() => !this.service.hasPendingTasks());
+
+    assert.ok(func1.calledOnce, 'func1 is called once with arguments');
+    assert.ok(func2.calledOnce, 'func2 is called once with arguments');
+  });
+
+  test('it waits for settled', async function (assert) {
+    const func = sinon.mock().thrice();
+
+    this.service.schedule(func);
+    this.service.schedule(func);
+    this.service.schedule(func);
+
+    await settled();
+
+    assert.ok(func.verify(), 'func is called with arguments');
+  });
 });
