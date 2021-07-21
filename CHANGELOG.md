@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/BBVAEngineering/ember-task-scheduler/compare/v2.3.0...v3.0.0) (2021-07-21)
+
+
+### Features
+
+* migrate to octane ([2d57144](https://github.com/BBVAEngineering/ember-task-scheduler/commit/2d5714493894848634e9e9f327d000729a12eead))
+
+
+### BREAKING CHANGES
+
+* add support for ember-qunit@5
+
 # [2.3.0](https://github.com/BBVAEngineering/ember-task-scheduler/compare/v2.2.0...v2.3.0) (2021-01-14)
 
 ### Features
