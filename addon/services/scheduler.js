@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import Service from '@ember/service';
-import { begin, end } from '@ember/runloop';
+import { run } from '@ember/runloop';
 import { assert, warn } from '@ember/debug';
 import { getOwner } from '@ember/application';
 import { buildWaiter } from '@ember/test-waiters';
@@ -419,9 +419,7 @@ export default class SchedulerService extends Service {
       startTime = performance.now();
     }
 
-    begin();
-    exec(target, method, args, onError, stack);
-    end();
+    run(() => exec(target, method, args, onError, stack));
 
     /* istanbul ignore next */
     if (env === 'development') {
