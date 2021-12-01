@@ -1,3 +1,9 @@
+## [3.0.1](https://github.com/BBVAEngineering/ember-task-scheduler/compare/v3.0.0...v3.0.1) (2021-12-01)
+
+### Bug Fixes
+
+- change begin+end by run ([9c18c35](https://github.com/BBVAEngineering/ember-task-scheduler/commit/9c18c3584f4348f24b43682e9fe6eda5b80d22b6))
+
 # [3.0.0](https://github.com/BBVAEngineering/ember-task-scheduler/compare/v2.3.0...v3.0.0) (2021-07-21)
 
 ### Features
