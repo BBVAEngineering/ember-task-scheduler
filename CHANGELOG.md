@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/BBVAEngineering/ember-task-scheduler/compare/v3.0.1...v3.1.0) (2022-10-18)
+
+
+### Features
+
+* upgrade to Ember 4 ([865175f](https://github.com/BBVAEngineering/ember-task-scheduler/commit/865175f3c1ea0282aacff197500f3308ef2f9136))
+
 ## [3.0.1](https://github.com/BBVAEngineering/ember-task-scheduler/compare/v3.0.0...v3.0.1) (2021-12-01)
 
 ### Bug Fixes
