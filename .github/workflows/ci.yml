@@ -10,7 +10,7 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v2
         with:
-          node-version: 12
+          node-version: 14
           cache: yarn
       - name: Install dependencies
         run: yarn install
@@ -29,18 +29,16 @@ jobs:
           files: ./coverage/lcov.info
           fail_ci_if_error: true
   regression:
+    if: github.ref != 'refs/heads/master'
     needs: test
     runs-on: ubuntu-latest
     name: Regression test - ${{ matrix.ember_try_scenario }} - Experimental ${{ matrix.experimental }}
     strategy:
       matrix:
         ember_try_scenario:
-          - ember-lts-3.20
-          - ember-lts-3.24
           - ember-release
           - ember-beta
-          - ember-default-with-jquery
-          - ember-classic
+          - ember-octane
           - embroider-safe
           - embroider-optimized
         experimental: [false]
@@ -55,7 +53,7 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v2
         with:
-          node-version: 12
+          node-version: 14
           cache: yarn
       - name: Install dependencies
         run: yarn install
@@ -63,7 +61,7 @@ jobs:
         run: yarn ember try:one ${{ matrix.ember_try_scenario }}
   release:
     if: github.ref == 'refs/heads/master'
-    needs: [test, regression]
+    needs: test
     runs-on: ubuntu-latest
     name: Release
     steps:
@@ -75,12 +73,12 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v2
         with:
-          node-version: 12
+          node-version: 14
           registry-url: 'https://registry.npmjs.org'
       - name: Configure CI Git User
         run: |
-          git config --global user.email adrigzr@users.noreply.github.com
-          git config --global user.name adrigzr
+          git config --global user.email eumendoza@users.noreply.github.com
+          git config --global user.name eumendoza
       - name: Install dependencies
         run: yarn install
       - name: Release
