@@ -348,6 +348,22 @@ export default class SchedulerService extends Service {
   }
 
   /**
+   * Ember hook.
+   *
+   *
+   * @method willDestroy
+   * @private
+   */
+  // istanbul ignore next
+  willDestroy() {
+    super.willDestroy(...arguments);
+
+    if (this._currentInstance) {
+      this._end();
+    }
+  }
+
+  /**
    * Frame running loop. It tries to fit tasks in a given frame until frame takes too long.
    *
    * @method _loop
